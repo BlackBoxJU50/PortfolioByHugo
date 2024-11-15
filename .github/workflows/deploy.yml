@@ -1,0 +1,33 @@
+name: Build and Deploy Hugo site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to match your default branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23.3'
+
+      - name: Install dependencies (npm or yarn)
+        run: |
+          npm install
+          # Or use `yarn install` if you're using yarn
+
+      - name: Build Hugo site
+        run: hugo --minify
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
